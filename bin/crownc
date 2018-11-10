@@ -40,8 +40,8 @@ ${CILLY} $1 -o ${TARGET} --save-temps --doCrownInstrument \
 # libcrown-replay : The library for target program with symbolic setting,
 #                   whose source code is not cil-instrumented
 # TODO: Implement replay for initial inputs
-#${CC} -o ${TARGET}_replay ${@} -I${DIR}/include -L${DIR}/lib -lcrown-replay \
-#				--coverage
+${CC} -o ${TARGET}_replay ${@} -I${DIR}/include -L${DIR}/lib -lcrown-replay \
+				--coverage
 
 echo "Complied with ${OPERATION_OPTION} option"
 
