@@ -29,7 +29,9 @@
 #include "base/basic_types.h"
 #include "base/basic_functions.h"
 #include "run_crown/unary_expression.h"
+
 //#include "run_crown/symbolic_expression_factory.h"
+#define FILE2SHOW_ASSUME_VIOLATED "__SYM_assume_violated"
 
 using std::binary_function;
 using std::ifstream;
@@ -66,6 +68,9 @@ struct ScoredBranchComp
 		return (a.second < b.second);
 	}
 };
+
+// A flag to show if SYM_assume(exp) is violated;
+bool SYM_assume_violated;
 
 }  // namespace
 
@@ -286,6 +291,8 @@ int Search::LaunchProgram(const vector<Value_t>& inputs) {
 void Search::RunProgram(const vector<Value_t>& inputs, SymbolicExecution* ex) {
     int exitcode;
 	fprintf(stderr, "-------------------------\n");
+
+
 	if (++num_iters_ > max_iters_) {
 #if 0
 		fprintf(stderr, "Path count: %u\n", Z3Solver::path_cnt_);
@@ -322,6 +329,8 @@ void Search::RunProgram(const vector<Value_t>& inputs, SymbolicExecution* ex) {
 	// Run the program.
 	exitcode = LaunchProgram(inputs);
 
+
+
 	// Read the execution from the program.
 	// Want to do this with sockets.  (Currently doing it with files.)
 	ifstream in("szd_execution", ios::in | ios::binary);
@@ -332,6 +341,35 @@ void Search::RunProgram(const vector<Value_t>& inputs, SymbolicExecution* ex) {
 	assert(in && ex->Parse(in));
 	//std::cout<<"Parse time "<<((double)clock() - clk)/CLOCKS_PER_SEC<<" numOfExpr "<<global_numOfExpr_<<" op "<<global_numOfOperator_<<" var "<<global_numOfVar_<<std::endl;
 	in.close();
+
+	/* Moonzoo Kim (2018-11-10)
+	 * 
+	 * If a child process that runs a target program has violated SYM_assume,
+	 * the child process creates a file FILE2SHOW_ASSUME_VIOLATED.
+	 * 
+	 * run_crown checks if the file exists and if so, 
+	 * it updates SYM_assume_violated as true.
+	 * if SYM_assume_violated is true, 
+	 * 1. run_crown removes * the current test input and the flag file here, and
+	 * 2. all search strategies do not update coverage except cfg heuristics
+	 *    (i.e., if(!SYM_assume_violate) UpdateCoverage(...).)
+	 *
+	 * NOTE: ex->Parse(in) should be executed to continue next iteration 
+	 * regardless of SYM_assume violation.
+	 */
+	FILE *f=fopen(FILE2SHOW_ASSUME_VIOLATED, "r");
+	SYM_assume_violated = f !=NULL ? true: false; 
+	if(f != NULL && fclose(f)) {
+		fprintf(stderr,"Error: %s is not closed\n", FILE2SHOW_ASSUME_VIOLATED);
+	}
+
+	if (SYM_assume_violated) {
+		num_iters_ -= 1;
+		if(remove(FILE2SHOW_ASSUME_VIOLATED)!=0) {
+			printf("Error: %s cannot be removed!!!\n",FILE2SHOW_ASSUME_VIOLATED);
+		}
+		return;
+	} 
 
 	sym_path_length += ex->path().constraints().size();
 	con_path_length += ex->path().branches().size();
@@ -368,13 +406,13 @@ void Search::RunProgram(const vector<Value_t>& inputs, SymbolicExecution* ex) {
 		if (status != -1)
 		{
 			char fname[BUFSIZ] = {0,};
-			snprintf(fname, BUFSIZ, "%s/input.%d",
-					TCdir.c_str(), num_iters_);
-            if (WIFEXITED(exitcode) != 0){
-    			WriteInputToFileOrDie(fname, ex->inputs(), ex->h(), ex->l(), ex->indexSize());
-            }else{
-                WriteInputToFileOrDie(fname, inputs, ex->h(), ex->l(), ex->indexSize());
-            }
+			snprintf(fname, BUFSIZ, "%s/input.%d", TCdir.c_str(), num_iters_);
+
+			if (WIFEXITED(exitcode) != 0){
+				WriteInputToFileOrDie(fname, ex->inputs(), ex->h(), ex->l(), ex->indexSize());
+			}else{
+				WriteInputToFileOrDie(fname,       inputs, ex->h(), ex->l(), ex->indexSize());
+			}
 		}
 	}
 }
@@ -390,6 +428,7 @@ bool Search::UpdateCoverage(const SymbolicExecution& ex,
 	const unsigned int prev_covered_ = num_covered_;
 	const SymbolicPath &path = ex.path();
 	const vector<branch_id_t>& branches = path.branches();
+
 
 	for (BranchIt i = branches.begin(); i != branches.end(); ++i) {
 		if ((*i > 0) && !covered_[*i]) {
@@ -639,15 +678,15 @@ BoundedDepthFirstSearch::~BoundedDepthFirstSearch() { }
 void BoundedDepthFirstSearch::Run() {
 	// Initial execution (on empty/random inputs).
 	SymbolicExecution ex = SymbolicExecution();
-	RunProgram(vector<Value_t>(), &ex);
-	UpdateCoverage(ex);
+	RunProgram(vector<Value_t>(), &ex); 
+	if(!SYM_assume_violated)
+		UpdateCoverage(ex);
 
 	if(reverse_ == true)
 		reverse_DFS(0, max_depth_, ex);
 	else
 		DFS(0,max_depth_,ex);
 	// DFS(0, ex);
-
 }
 
 void BoundedDepthFirstSearch::reverse_DFS(size_t pos, int depth, SymbolicExecution& prev_ex) {
@@ -673,9 +712,10 @@ void BoundedDepthFirstSearch::reverse_DFS(size_t pos, int depth, SymbolicExecuti
 
 		// Run on those constraints.
 		cur_ex = SymbolicExecution();
-		RunProgram(input, &cur_ex);
-		UpdateCoverage(cur_ex);
+		RunProgram(input, &cur_ex);  
 
+		if(!SYM_assume_violated)
+			UpdateCoverage(cur_ex);
 
 		// Check for prediction failure.
 		size_t branch_idx = path.constraints_idx()[i];
@@ -715,8 +755,10 @@ void BoundedDepthFirstSearch::DFS(size_t pos, int depth, SymbolicExecution& prev
 
 		// Run on those constraints.
 		cur_ex = SymbolicExecution();
-		RunProgram(input, &cur_ex);
-		UpdateCoverage(cur_ex);
+		RunProgram(input, &cur_ex);  
+
+		if(!SYM_assume_violated)
+			UpdateCoverage(cur_ex);
 
 
 		// Check for prediction failure.
@@ -752,7 +794,9 @@ void RandomInputSearch::Run() {
 		RandomInput(ex_.vars(), &input);
 		ex_ = SymbolicExecution();
 		RunProgram(input, &ex_);
-		UpdateCoverage(ex_);
+
+		if(!SYM_assume_violated)
+			UpdateCoverage(ex_);
 	}
 }
 
@@ -775,7 +819,9 @@ void RandomSearch::Run() {
 		vector<Value_t> next_input;
 		ex_ = SymbolicExecution();
 		RunProgram(next_input, &ex_);
-		UpdateCoverage(ex_);
+
+		if(!SYM_assume_violated)
+			UpdateCoverage(ex_);
 
 		// Do some iterations.
 		int count = 0;
@@ -787,7 +833,9 @@ void RandomSearch::Run() {
 			if (SolveRandomBranch(&next_input, &idx)) {
 				next_ex = SymbolicExecution();
 				RunProgram(next_input, &next_ex);
-				bool found_new_branch = UpdateCoverage(next_ex);
+
+				bool found_new_branch= 
+					!SYM_assume_violated ? UpdateCoverage(next_ex): false; 
 				bool prediction_failed =
 					!CheckPrediction(ex_, next_ex, ex_.path().constraints_idx()[idx]);
 
@@ -838,7 +886,8 @@ void RandomSearch::SolveUncoveredBranches(size_t i, int depth,
 
 		cur_ex = SymbolicExecution();
 		RunProgram(input, &cur_ex);
-		UpdateCoverage(cur_ex);
+		if(!SYM_assume_violated)
+			UpdateCoverage(cur_ex);
 		if (!CheckPrediction(prev_ex, cur_ex, bid_idx)) {
 			fprintf(stderr, "Prediction failed.\n");
 			continue;
@@ -893,7 +942,8 @@ UniformRandomSearch::UniformRandomSearch(const string& program,
 		// Initial execution (on empty/random inputs).
 		prev_ex_ = SymbolicExecution();
 		RunProgram(vector<Value_t>(), &prev_ex_);
-		UpdateCoverage(prev_ex_);
+		if(!SYM_assume_violated)
+			UpdateCoverage(prev_ex_);
 
 		while (true) {
 			fprintf(stderr, "RESET\n");
@@ -919,7 +969,9 @@ void UniformRandomSearch::DoUniformRandomPath() {
 			if (rand() % 2 == 0) {
 				cur_ex_ = SymbolicExecution();
 				RunProgram(input, &cur_ex_);
-				UpdateCoverage(cur_ex_);
+
+				if(!SYM_assume_violated)
+					UpdateCoverage(cur_ex_);
 				size_t branch_idx = prev_ex_.path().constraints_idx()[i];
 				if (!CheckPrediction(prev_ex_, cur_ex_, branch_idx)) {
 					fprintf(stderr, "prediction failed\n");
@@ -951,7 +1003,8 @@ HybridSearch::HybridSearch(const string& program, int max_iterations, int step_s
 			// Execution on empty/random inputs.
 			ex = SymbolicExecution();
 			RunProgram(vector<Value_t>(), &ex);
-			UpdateCoverage(ex);
+			if(!SYM_assume_violated)
+				UpdateCoverage(ex);
 
 			// Local searches at increasingly deeper execution points.
 			for (size_t pos = 0; pos < ex.path().constraints().size(); pos += step_size_) {
@@ -995,7 +1048,8 @@ bool HybridSearch::RandomStep(SymbolicExecution *ex, size_t start, size_t end) {
 		if (SolveAtBranch(*ex, i, &input)) {
 			next_ex = SymbolicExecution();
 			RunProgram(input, &next_ex);
-			UpdateCoverage(next_ex);
+			if(!SYM_assume_violated)
+				UpdateCoverage(next_ex);
 			if (CheckPrediction(*ex, next_ex, ex->path().constraints_idx()[i])) {
 				ex->Swap(next_ex);
 				return true;
@@ -1138,6 +1192,7 @@ void CfgHeuristicSearch::Run() {
 		fprintf(stderr, "RESET\n");
 		ex = SymbolicExecution();
 		RunProgram(vector<Value_t>(), &ex);
+
 		if (UpdateCoverage(ex)) {
 			UpdateBranchDistances();
 			//PrintStats();
@@ -1265,6 +1320,7 @@ bool CfgHeuristicSearch::DoSearch(int depth,
 
 		cur_ex = SymbolicExecution();
 		RunProgram(input, &cur_ex);
+
 		iters--;
 
 		size_t b_idx = prev_ex.path().constraints_idx()[scoredBranches[i].first];
@@ -1589,6 +1645,7 @@ bool CfgHeuristicSearch::DoBoundedBFS(int i, int depth, SymbolicExecution& prev_
 		}
 		cur_ex = SymbolicExecution();
 		RunProgram(input, &cur_ex);
+
 		iters_left_--;
 		if (UpdateCoverage(cur_ex)) {
 			success_ex_.Swap(cur_ex);

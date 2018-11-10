@@ -12,7 +12,10 @@
 #ifndef LIBCROWN_CROWN_H__
 #define LIBCROWN_CROWN_H__
 
-//#include <stdlib.h>
+#define FILE2SHOW_ASSUME_VIOLATED "__SYM_assume_violated"
+
+#include <stdlib.h>
+#include <stdio.h>
 
 /*
  * During instrumentation, the folowing function calls are inserted in the
@@ -304,47 +307,64 @@ EXTERN void __CrownCheckSymbolic(__CROWN_ID, char *callee) __SKIP;
 #define SYM_is_fresh(x) __CrownIsFresh(&x)
 
 #define VA_NUM_ARGS_IMPL(_1, _2, N, ...) N
-
-#define SYM_unsigned_char2(x, val, ...) { static int cnt_symbolic_var = 1; \
-            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUChar2(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUChar2(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
+/* Kunwoo Park (2018-11-09)                                               *
+ * 1. Renaming SYM_unsigned_char_2() -> SYM_unsigned_char_init() and etc. *
+ * 2. Renaming __CrownUChar2() -> __CrownUCharInit() and etc.             */
+#define SYM_unsigned_char_init(x, val, ...) { static int cnt_symbolic_var = 1; \
+            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUCharInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUCharInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
             cnt_symbolic_var++; }
-#define SYM_unsigned_short2(x, val, ...) { static int cnt_symbolic_var = 1; \
-            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUShort2(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUShort2(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
+#define SYM_unsigned_short_init(x, val, ...) { static int cnt_symbolic_var = 1; \
+            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUShortInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUShortInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
                 cnt_symbolic_var++; }
-#define SYM_unsigned_int2(x, val, ...) { static int cnt_symbolic_var = 1; \
-            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUInt2(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUInt2(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
+#define SYM_unsigned_int_init(x, val, ...) { static int cnt_symbolic_var = 1; \
+            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUIntInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUIntInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
                 cnt_symbolic_var++; }
-#define SYM_unsigned_long2(x, val, ...) { static int cnt_symbolic_var = 1; \
-            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownULong2(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownULong2(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
+#define SYM_unsigned_long_init(x, val, ...) { static int cnt_symbolic_var = 1; \
+            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownULongInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownULongInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
                 cnt_symbolic_var++; }
-#define SYM_unsigned_long_long2(x, val, ...) { static int cnt_symbolic_var = 1; \
-            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownULongLong2(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownULongLong2(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
+#define SYM_unsigned_long_long_init(x, val, ...) { static int cnt_symbolic_var = 1; \
+            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownULongLongInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownULongLongInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
                 cnt_symbolic_var++; }
-#define SYM_char2(x, val, ...) { static int cnt_symbolic_var = 1; \
-            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownChar2(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownChar2(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
+#define SYM_char_init(x, val, ...) { static int cnt_symbolic_var = 1; \
+            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownCharInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownCharInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
                 cnt_symbolic_var++; }
-#define SYM_short2(x, val, ...) { static int cnt_symbolic_var = 1; \
-            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownShort2(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownShort2(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
+#define SYM_short_init(x, val, ...) { static int cnt_symbolic_var = 1; \
+            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownShortInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownShortInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
                 cnt_symbolic_var++; }
-#define SYM_int2(x, val, ...) { static int cnt_symbolic_var = 1; \
-            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownInt2(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownInt2(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
+#define SYM_int_init(x, val, ...) { static int cnt_symbolic_var = 1; \
+            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownIntInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownIntInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
                 cnt_symbolic_var++; }
-#define SYM_long2(x, val, ...) { static int cnt_symbolic_var = 1; \
-            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLong2(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLong2(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
+#define SYM_long_init(x, val, ...) { static int cnt_symbolic_var = 1; \
+            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLongInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLongInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
                 cnt_symbolic_var++; }
-#define SYM_long_long2(x, val, ...) { static int cnt_symbolic_var = 1; \
-            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLongLong2(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLongLong2(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
+#define SYM_long_long_init(x, val, ...) { static int cnt_symbolic_var = 1; \
+            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLongLongInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLongLongInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
                 cnt_symbolic_var++; }
-#define SYM_float2(x, val, ...) { static int cnt_symbolic_var = 1; \
-            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownFloat2(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownFloat2(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
+#define SYM_float_init(x, val, ...) { static int cnt_symbolic_var = 1; \
+            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownFloatInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownFloatInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
                 cnt_symbolic_var++; }
-#define SYM_double2(x, val, ...) { static int cnt_symbolic_var = 1; \
-            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownDouble2(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownDouble2(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
+#define SYM_double_init(x, val, ...) { static int cnt_symbolic_var = 1; \
+            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownDoubleInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownDoubleInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
                 cnt_symbolic_var++; }
-#define SYM_long_double2(x, val, ...) { static int cnt_symbolic_var = 1; \
-            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLongDouble2(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLongDouble2(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
+#define SYM_long_double_init(x, val, ...) { static int cnt_symbolic_var = 1; \
+            (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLongDoubleInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLongDoubleInit(&x, val, cnt_symbolic_var, __LINE__, __FILE__, #x); \
                 cnt_symbolic_var++; }
 
+/* Kunwoo Park (2018-11-09) : Define SYM_assume()            *
+ * Input: Boolean Expression                                 *
+ * If input expression is not satisfied,                     *
+ * 1. Prints an error message                                *
+ * 2. Generates a file to communicate with run_crown process *
+ * 3. Exit the current process                               */
+#define SYM_assume(e) \
+do { \
+  if (!(e)) { \
+    fprintf(stderr, "### SYM_assume(%s) is violated at Line %d (%s in %s) ###\n", #e, __LINE__, __FUNCTION__, __FILE__); \ 
+    FILE * f = fopen( FILE2SHOW_ASSUME_VIOLATED, "w"); \
+    if(!f) fprintf(stderr,"### %s file cannot be created ###\n", FILE2SHOW_ASSUME_VIOLATED); \
+    else fclose(f); \
+    exit(1); \
+  } } while (0) \
 
 EXTERN void __CrownUChar(unsigned char* x, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
 EXTERN void __CrownUShort(unsigned short* x, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
@@ -362,19 +382,20 @@ EXTERN void __CrownLongDouble(long double * x, int cnt_sym_var, int ln, char* fn
 EXTERN void __CrownPointer(void ** x, __CROWN_VALUE, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
 EXTERN int __CrownIsFresh(void ** x) __SKIP;
 EXTERN unsigned long long __CrownBitField(unsigned char* x,char unionSize, int lowestBit, int highestBit, int cnt_sym_var, int ln, char* fname, ...);
+// Kunwoo Park (2018-11-09) : Renaming __CrownUChar2() -> __CrownUCharInit() and etc.
+EXTERN void __CrownUCharInit(unsigned char* x, unsigned char val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
+EXTERN void __CrownUShortInit(unsigned short* x, unsigned short val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
+EXTERN void __CrownUIntInit(unsigned int* x, unsigned int val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
+EXTERN void __CrownULongInit(unsigned long* x, unsigned long val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
+EXTERN void __CrownULongLongInit(unsigned long long* x, unsigned long long val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
+EXTERN void __CrownCharInit(char* x, char val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
+EXTERN void __CrownShortInit(short* x, short val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
+EXTERN void __CrownIntInit(int* x, int val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
+EXTERN void __CrownLongInit(long * x, long val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
+EXTERN void __CrownLongLongInit(long long * x, long long val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
+EXTERN void __CrownFloatInit(float * x, float val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
+EXTERN void __CrownDoubleInit(double * x, double val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
+EXTERN void __CrownLongDoubleInit(long double * x, long double val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
 
-EXTERN void __CrownUChar2(unsigned char* x, unsigned char val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
-EXTERN void __CrownUShort2(unsigned short* x, unsigned short val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
-EXTERN void __CrownUInt2(unsigned int* x, unsigned int val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
-EXTERN void __CrownULong2(unsigned long* x, unsigned long val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
-EXTERN void __CrownULongLong2(unsigned long long* x, unsigned long long val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
-EXTERN void __CrownChar2(char* x, char val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
-EXTERN void __CrownShort2(short* x, short val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
-EXTERN void __CrownInt2(int* x, int val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
-EXTERN void __CrownLong2(long * x, long val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
-EXTERN void __CrownLongLong2(long long * x, long long val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
-EXTERN void __CrownFloat2(float * x, float val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
-EXTERN void __CrownDouble2(double * x, double val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
-EXTERN void __CrownLongDouble2(long double * x, long double val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
 
 #endif  /* LIBCROWN_CROWN_H__ */

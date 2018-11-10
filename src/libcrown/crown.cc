@@ -580,8 +580,8 @@ void __CrownUChar(unsigned char* x, int cnt_sym_var, int ln, char* fname, ...) {
 #endif
 }
 
-
-void __CrownUChar2(unsigned char* x, unsigned char val, int cnt_sym_var, int ln, char* fname, ...) {
+// Kunwoo Park (2018-11-09) : Renaming __CrownUChar2() -> __CrownUCharInit()
+void __CrownUCharInit(unsigned char* x, unsigned char val, int cnt_sym_var, int ln, char* fname, ...) {
     va_list ap;
     va_start(ap, fname);
     char* var_name = va_arg(ap, char*);
@@ -620,8 +620,8 @@ void __CrownUShort(unsigned short* x, int cnt_sym_var, int ln, char* fname, ...)
 #endif
 }
 
-
-void __CrownUShort2(unsigned short* x, unsigned short val, int cnt_sym_var, int ln, char* fname, ...) {
+// Kunwoo Park (2018-11-09) : Renaming __CrownUShort2() -> __CrownUShortInit()
+void __CrownUShortInit(unsigned short* x, unsigned short val, int cnt_sym_var, int ln, char* fname, ...) {
     va_list ap;
     va_start(ap, fname);
     char* var_name = va_arg(ap, char*);
@@ -661,8 +661,8 @@ void __CrownUInt(unsigned int* x, int cnt_sym_var, int ln, char* fname, ...) {
 #endif
 }
 
-
-void __CrownUInt2(unsigned int* x, unsigned int val, int cnt_sym_var, int ln, char* fname, ...) {
+// Kunwoo Park (2018-11-09) : Renaming __CrownUInt2() -> __CrownUIntInit()
+void __CrownUIntInit(unsigned int* x, unsigned int val, int cnt_sym_var, int ln, char* fname, ...) {
     va_list ap;
     va_start(ap, fname);
     char* var_name = va_arg(ap, char*);
@@ -702,8 +702,8 @@ void __CrownULong(unsigned long* x, int cnt_sym_var, int ln, char* fname, ...) {
 #endif
 }
 
-
-void __CrownULong2(unsigned long* x, unsigned long val, int cnt_sym_var, int ln, char* fname, ...) {
+// Kunwoo Park (2018-11-09) : Renaming __CrownULong2() -> __CrownULongInit()
+void __CrownULongInit(unsigned long* x, unsigned long val, int cnt_sym_var, int ln, char* fname, ...) {
     va_list ap;
     va_start(ap, fname);
     char* var_name = va_arg(ap, char*);
@@ -743,8 +743,8 @@ void __CrownULongLong(unsigned long long* x, int cnt_sym_var, int ln, char* fnam
 #endif
 }
 
-
-void __CrownULongLong2(unsigned long long* x, unsigned long long val, int cnt_sym_var, int ln, char* fname, ...) {
+// Kunwoo Park (2018-11-09) : Renaming __CrownULongLong2() -> __CrownULongLongInit()
+void __CrownULongLongInit(unsigned long long* x, unsigned long long val, int cnt_sym_var, int ln, char* fname, ...) {
     va_list ap;
     va_start(ap, fname);
     char* var_name = va_arg(ap, char*);
@@ -784,8 +784,8 @@ void __CrownChar(char* x, int cnt_sym_var, int ln, char* fname, ...) {
 #endif
 }
 
-
-void __CrownChar2(char* x, char val, int cnt_sym_var, int ln, char* fname, ...) {
+// Kunwoo Park (2018-11-09) : Renaming __CrownChar2() -> __CrownCharInit()
+void __CrownCharInit(char* x, char val, int cnt_sym_var, int ln, char* fname, ...) {
     va_list ap;
     va_start(ap, fname);
     char* var_name = va_arg(ap, char*);
@@ -825,8 +825,8 @@ void __CrownShort(short* x, int cnt_sym_var, int ln, char* fname, ...) {
 #endif
 }
 
-
-void __CrownShort2(short* x, short val, int cnt_sym_var, int ln, char* fname, ...) {
+// Kunwoo Park (2018-11-09) : Renaming __CrownShort2() -> __CrownShortInit()
+void __CrownShortInit(short* x, short val, int cnt_sym_var, int ln, char* fname, ...) {
     va_list ap;
     va_start(ap, fname);
     char* var_name = va_arg(ap, char*);
@@ -866,8 +866,8 @@ void __CrownInt(int* x, int cnt_sym_var, int ln, char* fname, ...) {
 #endif
 }
 
-
-void __CrownInt2(int* x, int val, int cnt_sym_var, int ln, char* fname, ...) {
+// Kunwoo Park (2018-11-09) : Renaming __CrownInt2() -> __CrownIntInit()
+void __CrownIntInit(int* x, int val, int cnt_sym_var, int ln, char* fname, ...) {
     va_list ap;
     va_start(ap, fname);
     char* var_name = va_arg(ap, char*);
@@ -907,8 +907,8 @@ void __CrownLong(long* x, int cnt_sym_var, int ln, char* fname, ...) {
 #endif
 }
 
-
-void __CrownLong2(long* x, long val, int cnt_sym_var, int ln, char* fname, ...) {
+// Kunwoo Park (2018-11-09) : Renaming __CrownLong2() -> __CrownLongInit()
+void __CrownLongInit(long* x, long val, int cnt_sym_var, int ln, char* fname, ...) {
     va_list ap;
     va_start(ap, fname);
     char* var_name = va_arg(ap, char*);
@@ -948,8 +948,8 @@ void __CrownLongLong(long long* x, int cnt_sym_var, int ln, char* fname, ...) {
 #endif
 }
 
-
-void __CrownLongLong2(long long* x, long long val, int cnt_sym_var, int ln, char* fname, ...) {
+// Kunwoo Park (2018-11-09) : Renaming __CrownLongLong2() -> __CrownLongLongInit()
+void __CrownLongLongInit(long long* x, long long val, int cnt_sym_var, int ln, char* fname, ...) {
     va_list ap;
     va_start(ap, fname);
     char* var_name = va_arg(ap, char*);
@@ -994,8 +994,8 @@ void __CrownFloat(float* x, int cnt_sym_var, int ln, char* fname, ...) {
 #endif
 }
 
-
-void __CrownFloat2(float* x, float val,  int cnt_sym_var, int ln, char* fname, ...) {
+// Kunwoo Park (2018-11-09) : Renaming __CrownFloat2() -> __CrownFloatInit()
+void __CrownFloatInit(float* x, float val,  int cnt_sym_var, int ln, char* fname, ...) {
     va_list ap;
     va_start(ap, fname);
     char* var_name = va_arg(ap, char*);
@@ -1042,8 +1042,8 @@ void __CrownDouble(double* x, int cnt_sym_var, int ln, char* fname, ...) {
 #endif
 }
 
-
-void __CrownDouble2(double* x, double val, int cnt_sym_var, int ln, char* fname, ...) {
+// Kunwoo Park (2018-11-09) : Renaming __CrownDouble2() -> __CrownDoubleInit()
+void __CrownDoubleInit(double* x, double val, int cnt_sym_var, int ln, char* fname, ...) {
     va_list ap;
     va_start(ap, fname);
     char* var_name = va_arg(ap, char*);
@@ -1089,8 +1089,8 @@ void __CrownLongDouble(long double* x, int cnt_sym_var, int ln, char* fname, ...
 #endif
 }
 
-
-void __CrownLongDouble2(long double* x, long double val, int cnt_sym_var, int ln, char* fname, ...) {
+// Kunwoo Park (2018-11-09) : Renaming __CrownLongDouble2() -> __CrownLongDoubleInit()
+void __CrownLongDoubleInit(long double* x, long double val, int cnt_sym_var, int ln, char* fname, ...) {
     va_list ap;
     va_start(ap, fname);
     char* var_name = va_arg(ap, char*);
