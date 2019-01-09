@@ -448,7 +448,7 @@ bool Search::UpdateCoverage(const SymbolicExecution& ex,
 			total_num_covered_++;
 		}
 	}
-	fprintf(stderr, "Iteration %d (%lds, %ld.%lds): covered %u branches [%u reach funs, %u reach branches].(%u, %u)\n",
+	fprintf(stderr, "Iteration %d (%lds, %ld.%0.3lds): covered %u branches [%u reach funs, %u reach branches].(%u, %u)\n",
 			num_iters_, time(NULL)-start_time_, Z3Solver::GetRunningTime() / 1000, Z3Solver::GetRunningTime() % 1000,
 			total_num_covered_, reachable_functions_, reachable_branches_, num_covered_, prev_covered_);
 #if 0
