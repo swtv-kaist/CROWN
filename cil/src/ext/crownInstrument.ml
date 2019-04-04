@@ -244,15 +244,15 @@ let shouldSkipFunction f =
     let skipRegexp = Str.regexp "^__" in
     let skipByName = Str.string_match skipRegexp f.vname 0 in
     let skipInline = f.vinline in
-    Printf.printf "Func: %s\n" f.vname;
+    (*Printf.printf "Func: %s\n" f.vname;*)
     let attrstr attr = 
       match attr with
       | Attr (astr, _) -> Printf.printf "%s " astr;
     in
     List.iter attrstr f.vattr;
-    Printf.printf "\n";
+    (*Printf.printf "\n";*)
     if (f.vinline == true) then Printf.printf "inline\n" else Printf.printf "no inline\n";
-    Printf.printf "%B %B %B\n" skipByAttribute skipByName skipInline;
+    (*Printf.printf "%B %B %B\n" skipByAttribute skipByName skipInline;*)
     skipByAttribute || skipByName || skipInline
 
 let isProbeFunction f = 
