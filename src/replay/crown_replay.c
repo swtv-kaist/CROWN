@@ -141,11 +141,12 @@ bool overflow_occurs_string(const char *buf, int size)
     return (value > max) || (value < min);
 }
 
-void __CrownUChar(unsigned char *x, int cnt_sym_var, int ln, char* fname, ...)
+unsigned char __CrownUChar(int cnt_sym_var, int ln, char* fname, ...)
 {
     read_input_file();
 
     char buf[SIZE];
+    unsigned char x;
     // Read the type, but it will not be used.
     fgets(buf,sizeof(buf), f);
 
@@ -153,32 +154,35 @@ void __CrownUChar(unsigned char *x, int cnt_sym_var, int ln, char* fname, ...)
     if(!fgets(buf,sizeof(buf),f))
     {
         fprintf(stderr,NO_AVAILABLE_SYM_VAL);
-        exit(1);
+        abort();;
     }
     // If the value is not a number, exit program.
     else if(!isnumber(buf))
     {
         fprintf(stderr,NON_NUMBER_SYM_VAL,buf);
-        exit(1);
+        abort();;
     }
     else
     {
-        unsigned long long ull = strtoull(buf,NULL,10); 
+        unsigned long long ull = strtoull(buf,NULL,10);
         // Check if overflow occurs, and exit program if so.
         if(overflow_occurs_unsigned(ull,sizeof(unsigned char)))
         {
             fprintf(stderr,OVERFLOW_OCCURS_UNSIGNED, ull, "unsigned char");
-            exit(1);
+            abort();;
         }
         else
-            *x =(unsigned char)ull;
+            x =(unsigned char)ull;
     }
+    return x;
 }
-void __CrownUShort(unsigned short *x, int cnt_sym_var, int ln, char* fname, ...)
+
+unsigned short __CrownUShort(int cnt_sym_var, int ln, char* fname, ...)
 {
     read_input_file();
 
     char buf[SIZE];
+    unsigned short x;
     // Read the type, but it will not be used.
     fgets(buf,sizeof(buf), f);
 
@@ -186,13 +190,13 @@ void __CrownUShort(unsigned short *x, int cnt_sym_var, int ln, char* fname, ...)
     if(!fgets(buf,sizeof(buf),f))
     {
         fprintf(stderr,NO_AVAILABLE_SYM_VAL);
-        exit(1);
+        abort();;
     }
     // If the value is not a number, exit program.
     else if(!isnumber(buf))
     {
         fprintf(stderr,NON_NUMBER_SYM_VAL,buf);
-        exit(1);
+        abort();;
     }
     else
     {
@@ -201,17 +205,20 @@ void __CrownUShort(unsigned short *x, int cnt_sym_var, int ln, char* fname, ...)
         if(overflow_occurs_unsigned(ull,sizeof(unsigned short)))
         {
             fprintf(stderr,OVERFLOW_OCCURS_UNSIGNED, ull, "unsigned short");
-            exit(1);
+            abort();;
         }
         else
-            *x =(unsigned short)ull;
+            x =(unsigned short)ull;
     }
+    return x;
 }
-void __CrownUInt(unsigned int *x, int cnt_sym_var, int ln, char* fname, ...)
+
+unsigned int __CrownUInt(int cnt_sym_var, int ln, char* fname, ...)
 {
     read_input_file();
 
     char buf[SIZE];
+    unsigned int x;
     // Read the type, but it will not be used.
     fgets(buf,sizeof(buf), f);
 
@@ -219,13 +226,13 @@ void __CrownUInt(unsigned int *x, int cnt_sym_var, int ln, char* fname, ...)
     if(!fgets(buf,sizeof(buf),f))
     {
         fprintf(stderr,NO_AVAILABLE_SYM_VAL);
-        exit(1);
+        abort();;
     }
     // If the value is not a number, exit program.
     else if(!isnumber(buf))
     {
         fprintf(stderr,NON_NUMBER_SYM_VAL,buf);
-        exit(1);
+        abort();;
     }
     else
     {
@@ -234,17 +241,20 @@ void __CrownUInt(unsigned int *x, int cnt_sym_var, int ln, char* fname, ...)
         if(overflow_occurs_unsigned(ull,sizeof(unsigned int)))
         {
             fprintf(stderr, OVERFLOW_OCCURS_UNSIGNED, ull, "unsigned int");
-            exit(1);
+            abort();;
         }
         else
-            *x =(unsigned int)ull;
+            x =(unsigned int)ull;
    }
+   return x;
 }
-void __CrownULong(unsigned long *x, int cnt_sym_var, int ln, char* fname, ...)
+
+unsigned long __CrownULong(int cnt_sym_var, int ln, char* fname, ...)
 {
     read_input_file();
 
     char buf[SIZE];
+    unsigned long x;
     // Read the type, but it will not be used.
     fgets(buf,sizeof(buf), f);
 
@@ -252,13 +262,13 @@ void __CrownULong(unsigned long *x, int cnt_sym_var, int ln, char* fname, ...)
     if(!fgets(buf,sizeof(buf),f))
     {
         fprintf(stderr,NO_AVAILABLE_SYM_VAL);
-        exit(1);
+        abort();;
     }
     // If the value is not a number, exit program.
     else if(!isnumber(buf))
     {
         fprintf(stderr,NON_NUMBER_SYM_VAL,buf);
-        exit(1);
+        abort();;
     }
     else
     {
@@ -267,17 +277,20 @@ void __CrownULong(unsigned long *x, int cnt_sym_var, int ln, char* fname, ...)
         if(overflow_occurs_unsigned(ull,sizeof(unsigned long)))
         {
             fprintf(stderr, OVERFLOW_OCCURS_UNSIGNED, ull, "unsigned long");
-            exit(1);
+            abort();;
         }
         else
-            *x =(unsigned long)ull;
+            x =(unsigned long)ull;
     }
+    return x;
 }
-void __CrownULongLong(unsigned long long *x, int cnt_sym_var, int ln, char* fname, ...)
+
+unsigned long long __CrownULongLong(int cnt_sym_var, int ln, char* fname, ...)
 {
     read_input_file();
 
     char buf[SIZE];
+    unsigned long long x;
     // Read the type, but it will not be used.
     fgets(buf,sizeof(buf), f);
 
@@ -285,13 +298,13 @@ void __CrownULongLong(unsigned long long *x, int cnt_sym_var, int ln, char* fnam
     if(!fgets(buf,sizeof(buf),f))
     {
         fprintf(stderr,NO_AVAILABLE_SYM_VAL);
-        exit(1);
+        abort();;
     }
     // If the value is not a number, exit program.
     else if(!isnumber(buf))
     {
         fprintf(stderr,NON_NUMBER_SYM_VAL,buf);
-        exit(1);
+        abort();;
     }
     else
     {
@@ -300,17 +313,20 @@ void __CrownULongLong(unsigned long long *x, int cnt_sym_var, int ln, char* fnam
         if(overflow_occurs_unsigned(ull,sizeof(unsigned long long)))
         {
             fprintf(stderr,OVERFLOW_OCCURS_UNSIGNED, ull, "unsigned long long");
-            exit(1);
+            abort();;
         }
         else
-            *x =(unsigned long long)ull;
+            x =(unsigned long long)ull;
     }
+    return x;
 }
-void __CrownChar(char *x, int cnt_sym_var, int ln, char* fname, ...)
+
+char __CrownChar(int cnt_sym_var, int ln, char* fname, ...)
 {
     read_input_file();
 
     char buf[SIZE];
+    char x;
     // Read the type, but it will not be used.
     fgets(buf,sizeof(buf), f);
 
@@ -318,31 +334,34 @@ void __CrownChar(char *x, int cnt_sym_var, int ln, char* fname, ...)
     if(!fgets(buf,sizeof(buf),f))
     {
         fprintf(stderr,NO_AVAILABLE_SYM_VAL);
-        exit(1);
+        abort();;
     }
     // If the value is not a number, exit program.
     else if(!isnumber(buf))
     {
         fprintf(stderr,NON_NUMBER_SYM_VAL,buf);
-        exit(1);
+        abort();;
     }
     // Check if overflow occurs, and exit program if so.
     else if(overflow_occurs_string(buf,sizeof(char)))
     {
         fprintf(stderr, OVERFLOW_OCCURS_STRING, buf, "char");
-        exit(1);
+        abort();;
     }
     else
     {
         long long ll = strtoll(buf,NULL,10);
-        *x =(char)ll;
+        x =(char)ll;
     }
+    return x;
 }
-void __CrownShort(short *x, int cnt_sym_var, int ln, char* fname, ...)
+
+short __CrownShort(int cnt_sym_var, int ln, char* fname, ...)
 {
     read_input_file();
 
     char buf[SIZE];
+    short x;
     // Read the type, but it will not be used.
     fgets(buf,sizeof(buf), f);
 
@@ -350,31 +369,34 @@ void __CrownShort(short *x, int cnt_sym_var, int ln, char* fname, ...)
     if(!fgets(buf,sizeof(buf),f))
     {
         fprintf(stderr,NO_AVAILABLE_SYM_VAL);
-        exit(1);
+        abort();;
     }
     // If the value is not a number, exit program.
     else if(!isnumber(buf))
     {
         fprintf(stderr,NON_NUMBER_SYM_VAL,buf);
-        exit(1);
+        abort();;
     }
     // Check if overflow occurs, and exit program if so.
     else if(overflow_occurs_string(buf,sizeof(short)))
     {
         fprintf(stderr, OVERFLOW_OCCURS_STRING, buf, "short");
-        exit(1);
+        abort();;
     }
     else
     {
         long long ll = strtoll(buf,NULL,10);
-        *x =(short)ll;
+        x =(short)ll;
     }
+    return x;
 }
-void __CrownInt(int *x, int cnt_sym_var, int ln, char* fname, ...)
+
+int __CrownInt(int cnt_sym_var, int ln, char* fname, ...)
 {
     read_input_file();
 
     char buf[SIZE];
+    int x;
     // Read the type, but it will not be used.
     fgets(buf,sizeof(buf), f);
 
@@ -382,31 +404,34 @@ void __CrownInt(int *x, int cnt_sym_var, int ln, char* fname, ...)
     if(!fgets(buf,sizeof(buf),f))
     {
         fprintf(stderr,NO_AVAILABLE_SYM_VAL);
-        exit(1);
+        abort();;
     }
     // If the value is not a number, exit program.
     else if(!isnumber(buf))
     {
         fprintf(stderr,NON_NUMBER_SYM_VAL,buf);
-        exit(1);
+        abort();;
     }
     // Check if overflow occurs, and exit program if so.
     else if(overflow_occurs_string(buf,sizeof(int)))
     {
         fprintf(stderr, OVERFLOW_OCCURS_STRING, buf, "int");
-        exit(1);
+        abort();;
     }
     else
     {
         long long ll = strtoll(buf,NULL,10);
-        *x =(int)ll;
+        x =(int)ll;
     }
+    return x;
 }
-void __CrownLong(long *x, int cnt_sym_var, int ln, char* fname, ...)
+
+long __CrownLong(int cnt_sym_var, int ln, char* fname, ...)
 {
     read_input_file();
 
     char buf[SIZE];
+    long x;
     // Read the type, but it will not be used.
     fgets(buf,sizeof(buf), f);
 
@@ -414,31 +439,34 @@ void __CrownLong(long *x, int cnt_sym_var, int ln, char* fname, ...)
     if(!fgets(buf,sizeof(buf),f))
     {
         fprintf(stderr,NO_AVAILABLE_SYM_VAL);
-        exit(1);
+        abort();;
     }
     // If the value is not a number, exit program.
     else if(!isnumber(buf))
     {
         fprintf(stderr,NON_NUMBER_SYM_VAL,buf);
-        exit(1);
+        abort();;
     }
     // Check if overflow occurs, and exit program if so.
     else if(overflow_occurs_string(buf,sizeof(long)))
     {
         fprintf(stderr, OVERFLOW_OCCURS_STRING, buf, "long");
-        exit(1);
+        abort();;
     }
     else
     {
         long long ll = strtoll(buf,NULL,10);
-        *x =(long)ll;
+        x =(long)ll;
     }
+    return x;
 }
-void __CrownLongLong(long long *x, int cnt_sym_var, int ln, char* fname, ...)
+
+long long __CrownLongLong(int cnt_sym_var, int ln, char* fname, ...)
 {
     read_input_file();
 
     char buf[SIZE];
+    long long x;
     // Read the type, but it will not be used.
     fgets(buf,sizeof(buf), f);
 
@@ -446,31 +474,34 @@ void __CrownLongLong(long long *x, int cnt_sym_var, int ln, char* fname, ...)
     if(!fgets(buf,sizeof(buf),f))
     {
         fprintf(stderr,NO_AVAILABLE_SYM_VAL);
-        exit(1);
+        abort();;
     }
     // If the value is not a number, exit program.
     else if(!isnumber(buf))
     {
         fprintf(stderr,NON_NUMBER_SYM_VAL,buf);
-        exit(1);
+        abort();;
     }
     // Check if overflow occurs, and exit program if so.
     else if(overflow_occurs_string(buf,sizeof(long long)))
     {
         fprintf(stderr, OVERFLOW_OCCURS_STRING, buf, "long long");
-        exit(1);
+        abort();;
     }
     else
     {
         long long ll = strtoll(buf,NULL,10);
-        *x =(long long)ll;
+        x =(long long)ll;
     }
+    return x;
 }
-void __CrownFloat(float *x, int cnt_sym_var, int ln, char* fname, ...)
+
+float __CrownFloat(int cnt_sym_var, int ln, char* fname, ...)
 {
     read_input_file();
 
     char buf[SIZE];
+    float x;
     // Read the type, but it will not be used.
     fgets(buf,sizeof(buf), f);
 
@@ -478,24 +509,27 @@ void __CrownFloat(float *x, int cnt_sym_var, int ln, char* fname, ...)
     if(!fgets(buf,sizeof(buf),f))
     {
         fprintf(stderr,NO_AVAILABLE_SYM_VAL);
-        exit(1);
+        abort();;
     }
     // If the value is not a binary, exit program.
     else if(!isbinary(buf))
     {
         fprintf(stderr,NON_BINARY_SYM_VAL,buf);
-        exit(1);
+        abort();;
     }
     else {
         // Symbolic value for float is a binary string format.
-        *x = binStringToFloat(buf);
+        x = binStringToFloat(buf);
     }
+    return x;
 }
-void __CrownDouble(double *x, int cnt_sym_var, int ln, char* fname, ...)
+
+double __CrownDouble(int cnt_sym_var, int ln, char* fname, ...)
 {
     read_input_file();
 
     char buf[SIZE];
+    double x;
     // Read the type, but it will not be used.
     fgets(buf,sizeof(buf), f);
 
@@ -503,74 +537,78 @@ void __CrownDouble(double *x, int cnt_sym_var, int ln, char* fname, ...)
     if(!fgets(buf,sizeof(buf),f))
     {
         fprintf(stderr,NO_AVAILABLE_SYM_VAL);
-        exit(1);
-    } 
+        abort();;
+    }
     // If the value is not a binary, exit program.
     else if(!isbinary(buf))
     {
         fprintf(stderr,NON_BINARY_SYM_VAL,buf);
-        exit(1);
+        abort();;
     }
-    else
+    else{
         // Symbolic value for double is a binary string format.
-        *x = binStringToDouble(buf);
+        x = binStringToDouble(buf);
+    }
+    return x;
 }
+
 // Kunwoo Park (2018-11-09) : Renaming __CrownUChar2() -> __CrownUCharInit() and etc.
-void __CrownUCharInit(unsigned char* x, unsigned char val, int cnt_sym_var, int ln, char* fname, ...){
-    __CrownUChar(x, cnt_sym_var, ln, fname);
+unsigned char __CrownUCharInit(unsigned char* x, unsigned char val, int cnt_sym_var, int ln, char* fname, ...){
+    return __CrownUChar(cnt_sym_var, ln, fname);
 }
 
-void __CrownUShortInit(unsigned short* x, unsigned short val, int cnt_sym_var, int ln, char* fname, ...){
-    __CrownUShort(x, cnt_sym_var, ln, fname);
+unsigned short __CrownUShortInit(unsigned short* x, unsigned short val, int cnt_sym_var, int ln, char* fname, ...){
+    return __CrownUShort(cnt_sym_var, ln, fname);
 }
 
-void __CrownUIntInit(unsigned int* x, unsigned int val, int cnt_sym_var, int ln, char* fname, ...){
-    __CrownUInt(x, cnt_sym_var, ln, fname);
+unsigned int __CrownUIntInit(unsigned int* x, unsigned int val, int cnt_sym_var, int ln, char* fname, ...){
+    return __CrownUInt(cnt_sym_var, ln, fname);
 }
 
-void __CrownULongInit(unsigned long* x, unsigned long val, int cnt_sym_var, int ln, char* fname, ...){
-    __CrownULong(x, cnt_sym_var, ln, fname);
+unsigned long __CrownULongInit(unsigned long* x, unsigned long val, int cnt_sym_var, int ln, char* fname, ...){
+    return __CrownULong(cnt_sym_var, ln, fname);
 }
 
-void __CrownULongLongInit(unsigned long long* x, unsigned long long val, int cnt_sym_var, int ln, char* fname, ...){
-    __CrownULongLong(x, cnt_sym_var, ln, fname);
+unsigned long long __CrownULongLongInit(unsigned long long* x, unsigned long long val, int cnt_sym_var, int ln, char* fname, ...){
+    return __CrownULongLong(cnt_sym_var, ln, fname);
 }
 
-void __CrownCharInit(char* x, char val, int cnt_sym_var, int ln, char* fname, ...){
-    __CrownChar(x, cnt_sym_var, ln, fname);
+char  __CrownCharInit(char* x, char val, int cnt_sym_var, int ln, char* fname, ...){
+    return __CrownChar(cnt_sym_var, ln, fname);
 }
 
-void __CrownShortInit(short* x, short val, int cnt_sym_var, int ln, char* fname, ...){
-    __CrownShort(x, cnt_sym_var, ln, fname);
+short __CrownShortInit(short* x, short val, int cnt_sym_var, int ln, char* fname, ...){
+    return __CrownShort(cnt_sym_var, ln, fname);
 }
 
-void __CrownIntInit(int* x, int val, int cnt_sym_var, int ln, char* fname, ...){
-    __CrownInt(x, cnt_sym_var, ln, fname);
+int __CrownIntInit(int* x, int val, int cnt_sym_var, int ln, char* fname, ...){
+    return __CrownInt(cnt_sym_var, ln, fname);
 }
 
-void __CrownLongInit(long * x, long val, int cnt_sym_var, int ln, char* fname, ...){
-    __CrownLong(x, cnt_sym_var, ln, fname);
+long __CrownLongInit(long * x, long val, int cnt_sym_var, int ln, char* fname, ...){
+    return __CrownLong(cnt_sym_var, ln, fname);
 }
 
-void __CrownLongLongInit(long long * x, long long val, int cnt_sym_var, int ln, char* fname, ...){
-    __CrownLongLong(x, cnt_sym_var, ln, fname);
+long long __CrownLongLongInit(long long * x, long long val, int cnt_sym_var, int ln, char* fname, ...){
+    return __CrownLongLong(cnt_sym_var, ln, fname);
 }
 
-void __CrownFloatInit(float * x, float val, int cnt_sym_var, int ln, char* fname, ...){
-    __CrownFloat(x, cnt_sym_var, ln, fname);
+float __CrownFloatInit(float * x, float val, int cnt_sym_var, int ln, char* fname, ...){
+    return __CrownFloat(cnt_sym_var, ln, fname);
 }
 
-void __CrownDoubleInit(double * x, double val, int cnt_sym_var, int ln, char* fname, ...){
-    __CrownDouble(x, cnt_sym_var, ln, fname);
+double __CrownDoubleInit(double * x, double val, int cnt_sym_var, int ln, char* fname, ...){
+    return __CrownDouble(cnt_sym_var, ln, fname);
 }
 
 void __CrownLongDoubleInit(long double * x, long double val, int cnt_sym_var, int ln, char* fname, ...){
-    __CrownLongDouble(x, cnt_sym_var, ln, fname);
+   puts("crown_replay: SYM_longdouble_init() is not supported yet ");
+   exit (-1);
 }
 
 void __CrownLongDouble(long double *x, int cnt_sym_var, int ln, char* fname, ...)
 {
-    puts("crown_replay: CROWN_longdouble() is not supported yet ");
+    puts("crown_replay: SYM_longdouble() is not supported yet ");
     exit(-1);
 #if 0
     read_input_file();
