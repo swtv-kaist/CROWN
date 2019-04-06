@@ -191,13 +191,13 @@ let shouldSkipFunction f =
     let skipByName = Str.string_match skipRegexp f.vname 0 in
     let skipInline = f.vinline in
     (*Printf.printf "Func: %s\n" f.vname;*)
-    let attrstr attr = 
+    (*let attrstr attr = 
       match attr with
       | Attr (astr, _) -> Printf.printf "%s " astr;
-    in
-    List.iter attrstr f.vattr;
+    in*)
+    (*List.iter attrstr f.vattr;*)
     (*Printf.printf "\n";*)
-    if (f.vinline == true) then Printf.printf "inline\n" else Printf.printf "no inline\n";
+    (*if (f.vinline == true) then Printf.printf "inline\n" else Printf.printf "no inline\n";*)
     (*Printf.printf "%B %B %B\n" skipByAttribute skipByName skipInline;*)
     skipByAttribute || skipByName || skipInline
 
@@ -519,88 +519,6 @@ class crownInstrumentVisitor f =
    * Instrument an expression.
    *)
   let rec instrumentExpr e =
-	(* code for produce correct variable name...
-		let rec printexpr expr =
-			let rec printlval (lhost, offset) =
-					let rec printOffset offs =
-						match offs with
-							|NoOffset -> ()
-							|Field (finfo, off2) -> Printf.printf ".%s" finfo.fname; printOffset off2;()
-							|Index (ex, off2) -> Printf.printf "["; printexpr ex; Printf.printf "]"; printOffset off2; ()
-					in
-					(match lhost with
-						|Var varinfo ->
-							Printf.printf "%s" varinfo.vname; printOffset offset; ()
-						|Mem e ->
-							Printf.printf "Mem ("; printexpr e; Printf.printf ")"; printOffset offset; ()
-					)
-			in
-			match expr with
-				|Const c ->
-					(match c with
-						|CInt64 (i, ik, st) ->
-							Printf.printf "%s" (Int64.to_string i); ()
-						|CStr s ->
-							Printf.printf "\"%s\"" s; ()
-						|CWStr l ->
-							Printf.printf "CWStr";()
-						|CChr c ->
-							Printf.printf "\'%c\'" c; ()
-						|CReal (f,k,st) ->
-							Printf.printf "%f" f; ()
-						|CEnum (e,s,en) ->
-							Printf.printf "enum"; ()
-					)
-				|Lval (lhost, offset)-> printlval (lhost, offset);
-				|SizeOf typ -> Printf.printf"Sizeof "; ()
-				|SizeOfStr s ->
-					Printf.printf "sizeofstr (%s)" s; ()
-				|SizeOfE e ->
-					Printf.printf "SizeOFE "; printexpr e; ()
-				|AlignOf t ->
-					Printf.printf "AlignOf "; ()
-				|AlignOfE e ->
-					Printf.printf "AlignOfE "; printexpr e; ()
-				|UnOp (unop, e, ty) ->
-					(match unop with
-						|Neg -> Printf.printf " -("; printexpr e;Printf.printf ")"; ()
-						|BNot -> Printf.printf " ~("; printexpr e; Printf.printf ")";()
-						|LNot -> Printf.printf " !("; printexpr e; Printf.printf ")"; ()
-					)
-				|BinOp (binop,e1,e2,typ) ->
-					let getStrbinop binop =
-						match binop with
-							|PlusA -> "+"	|PlusPI -> "+"	|IndexPI -> "i+" |MinusA -> "-"	|MinusPI -> "-"
-							|MinusPP -> "-" |Mult -> "*"|Div -> "\\"	|Mod -> "%" |Shiftlt -> "shiftleft"
-							|Shiftrt -> "shiftright" |Lt -> "<" |Gt -> ">" |Le -> "<=" |Ge -> ">="
-							|Eq -> "==" |Ne -> "!=" |BAnd -> "&" |BXor -> "exclusive-or" |BOr -> "|"
-							|LAnd -> "&&" |LOr -> "||"
-					in
-					Printf.printf "binop {"; printexpr e1; Printf.printf " %s " (getStrbinop binop); printexpr e2; Printf.printf "}"; ()
-				|CastE (typ, e) ->
-					Printf.printf "CastE ("; printexpr e; Printf.printf " )";()
-				|AddrOf lv ->
-					Printf.printf "AddrOf ("; printlval lv; Printf.printf " )"; ()
-				|StartOf lv ->
-					Printf.printf "StartOf ("; printlval lv; Printf.printf " )"; ()
-				|_ ->
-					Printf.printf "call etc.."; ()
-		in
-		printexpr e;
-		Printf.printf "\n";
-		
-		let constToStr e =
-			match e with
-				|Const (c) -> 
-					match c with
-						|CInt64 (i64, _, _) -> Int64.to_string i64
-						|CStr (str) -> str
-						|CWStr (li) -> "list"
-						|CChr (ch) -> ch
-						|CReal (f, _,_) -> string_of_float f
-						|CEnum (_,_,_) -> "enum"
-				|_ -> ""
-		in*)
     let ty = typeOf e in
     if isConstant e then
       [mkLoad noAddr ty e (*(constToStr e)*)]
@@ -673,7 +591,7 @@ object (self)
             (self#queueInstr (instrumentExpr e) ;
              self#queueInstr [mkStore (addressOf lv)] ;
              SkipChildren)
-          
+
       (* Don't instrument calls to functions marked as uninstrumented
        * except caller-callee name setting. *)
       | Call (ret, Lval (Var f, NoOffset), _, _)
@@ -705,7 +623,7 @@ object (self)
       (*Printf.printf "Instr. func: %s\n" f.svar.vname;
       Printf.printf "Line: %d\n" f.svar.vdecl.line;
       Printf.printf "Inline: %B\n" f.svar.vinline;*)
-      let skip = shouldSkipFunction f.svar in
+      (*let skip = shouldSkipFunction f.svar in*)
       (*Printf.printf "Skip: %B\n" skip;*)
       curFunc <- f;
     if shouldSkipFunction f.svar then
@@ -722,8 +640,10 @@ object (self)
          *)
         if ((not isVarArgs) && (0 != String.compare f.svar.vname "main")) then
             prependToBlock (List.rev_map instParam paramsToInst) f.sbody
-         else
+         else(
+           isMainInFile := true;
            prependToBlock [mkClearStack ()] f.sbody;
+         );
         prependToBlock [mkCall !funCount] f.sbody ;
         prependToBlock [mkCheckSymbolic f.svar.vname] f.sbody ;
         DoChildren
@@ -786,7 +706,7 @@ let feature : featureDescr =
            * and by explicitly adding edges for calls to functions
            * defined in this file. *)
           handleCallEdgesAndWriteCfg f ;
-  
+
           (* Finally instrument the program. *)
     (let instVisitor = new crownInstrumentVisitor f in
              visitCilFileSameGlobals (instVisitor :> cilVisitor) f) ;
