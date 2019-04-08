@@ -22,7 +22,11 @@
 #include "libcrown/symbolic_interpreter.h"
 #include "base/basic_types.h"
 #include "base/basic_functions.h"
+#ifndef CIL
+#define CIL 1
 #include "libcrown/crown.h"
+#undef CIL
+#endif
 
 using std::vector;
 using std::map;
