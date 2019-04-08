@@ -315,50 +315,9 @@ do { \
 #define SYM_pointer(x, size, ...) { static int cnt_symbolic_var = 1; \
 	        (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownPointer(&x, size, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUChar(&x, size, cnt_symbolic_var, __LINE__, __FILE__, #x); \
 	            cnt_symbolic_var++; }
-#define SYM_bitfield(x, ...) { static int cnt_symbolic_var = 1; \
+#define SYMfield(x, ...) { static int cnt_symbolic_var = 1; \
 	        (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? (x = __CrownBitField(x,0,0,0, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__))  : (x = __CrownBitField(x, 0,0,0,cnt_symbolic_var, __LINE__, __FILE__, #x)); \
 	            cnt_symbolic_var++; }
-
-#define SYM_unsigned_char_bit(x, ...) { static int cnt_symbolic_var = 1; \
-              (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUChar(&x, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUChar(&x, cnt_symbolic_var, __LINE__, __FILE__, #x); \
-              cnt_symbolic_var++; }
-#define SYM_unsigned_short_bit(x, ...) { static int cnt_symbolic_var = 1; \
-              (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUShort(&x, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUShort(&x, cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                  cnt_symbolic_var++; }
-#define SYM_unsigned_int_bit(x, ...) { static int cnt_symbolic_var = 1; \
-              (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUInt(&x, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUInt(&x, cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                  cnt_symbolic_var++; }
-#define SYM_unsigned_long_bit(x, ...) { static int cnt_symbolic_var = 1; \
-              (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownULong(&x, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownULong(&x, cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                  cnt_symbolic_var++; }
-#define SYM_unsigned_longlong_bit(x, ...) { static int cnt_symbolic_var = 1; \
-              (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownULongLong(&x, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownULongLong(&x, cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                  cnt_symbolic_var++; }
-#define SYM_char_bit(x, ...) { static int cnt_symbolic_var = 1; \
-              (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownChar(&x, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownChar(&x, cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                  cnt_symbolic_var++; }
-#define SYM_short_bit(x, ...) { static int cnt_symbolic_var = 1; \
-              (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownShort(&x, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownShort(&x, cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                  cnt_symbolic_var++; }
-#define SYM_int_bit(x, ...) { static int cnt_symbolic_var = 1; \
-              (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownInt(&x, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownInt(&x, cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                  cnt_symbolic_var++; }
-#define SYM_long_bit(x, ...) { static int cnt_symbolic_var = 1; \
-              (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLong(&x, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLong(&x, cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                  cnt_symbolic_var++; }
-#define SYM_longlong_bit(x, ...) { static int cnt_symbolic_var = 1; \
-              (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLongLong(&x, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLongLong(&x, cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                  cnt_symbolic_var++; }
-#define SYM_float_bit(x, ...) { static int cnt_symbolic_var = 1; \
-              (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownFloat(&x, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownFloat(&x, cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                  cnt_symbolic_var++; }
-#define SYM_double_bit(x, ...) { static int cnt_symbolic_var = 1; \
-              (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownDouble(&x, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownDouble(&x, cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                  cnt_symbolic_var++; }
-#define SYM_longdouble_bit(x, ...) { static int cnt_symbolic_var = 1; \
-              (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLongDouble(&x, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLongDouble(&x, cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                  cnt_symbolic_var++; }
-
 
 #define SYM_is_fresh(x) __CrownIsFresh(&x)
 
@@ -438,92 +397,90 @@ EXTERN void __CrownDoubleInit(double * x, double val, int cnt_sym_var, int ln, c
 EXTERN void __CrownLongDoubleInit(long double * x, long double val, int cnt_sym_var, int ln, char* fname, ...) __SKIP;
 
 #else
-#define SYM_unsigned_char_bit(x, ...) { static int cnt_symbolic_var = 1; \
+#define SYM_unsigned_char(x, ...) { static int cnt_symbolic_var = 1; \
               x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUChar(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUChar(cnt_symbolic_var, __LINE__, __FILE__, #x); \
               cnt_symbolic_var++; }
-#define SYM_unsigned_short_bit(x, ...) { static int cnt_symbolic_var = 1; \
+#define SYM_unsigned_short(x, ...) { static int cnt_symbolic_var = 1; \
               x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUShort(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUShort(cnt_symbolic_var, __LINE__, __FILE__, #x); \
                   cnt_symbolic_var++; }
-#define SYM_unsigned_int_bit(x, ...) { static int cnt_symbolic_var = 1; \
+#define SYM_unsigned_int(x, ...) { static int cnt_symbolic_var = 1; \
               x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUInt(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUInt(cnt_symbolic_var, __LINE__, __FILE__, #x); \
                   cnt_symbolic_var++; }
-#define SYM_unsigned_long_bit(x, ...) { static int cnt_symbolic_var = 1; \
+#define SYM_unsigned_long(x, ...) { static int cnt_symbolic_var = 1; \
               x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownULong(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownULong(cnt_symbolic_var, __LINE__, __FILE__, #x); \
                   cnt_symbolic_var++; }
-#define SYM_unsigned_longlong_bit(x, ...) { static int cnt_symbolic_var = 1; \
+#define SYM_unsigned_longlong(x, ...) { static int cnt_symbolic_var = 1; \
               x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownULongLong(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownULongLong(cnt_symbolic_var, __LINE__, __FILE__, #x); \
                   cnt_symbolic_var++; }
-#define SYM_char_bit(x, ...) { static int cnt_symbolic_var = 1; \
+#define SYM_char(x, ...) { static int cnt_symbolic_var = 1; \
               x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownChar(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownChar(cnt_symbolic_var, __LINE__, __FILE__, #x); \
                   cnt_symbolic_var++; }
-#define SYM_short_bit(x, ...) { static int cnt_symbolic_var = 1; \
+#define SYM_short(x, ...) { static int cnt_symbolic_var = 1; \
               x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownShort(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownShort(cnt_symbolic_var, __LINE__, __FILE__, #x); \
                   cnt_symbolic_var++; }
-#define SYM_int_bit(x, ...) { static int cnt_symbolic_var = 1; \
+#define SYM_int(x, ...) { static int cnt_symbolic_var = 1; \
               x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownInt(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownInt(cnt_symbolic_var, __LINE__, __FILE__, #x); \
                   cnt_symbolic_var++; }
-#define SYM_long_bit(x, ...) { static int cnt_symbolic_var = 1; \
+#define SYM_long(x, ...) { static int cnt_symbolic_var = 1; \
               x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLong(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLong(cnt_symbolic_var, __LINE__, __FILE__, #x); \
                   cnt_symbolic_var++; }
-#define SYM_longlong_bit(x, ...) { static int cnt_symbolic_var = 1; \
+#define SYM_longlong(x, ...) { static int cnt_symbolic_var = 1; \
               x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLongLong(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLongLong(cnt_symbolic_var, __LINE__, __FILE__, #x); \
                   cnt_symbolic_var++; }
-#define SYM_float_bit(x, ...) { static int cnt_symbolic_var = 1; \
+#define SYM_float(x, ...) { static int cnt_symbolic_var = 1; \
               x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownFloat(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownFloat(cnt_symbolic_var, __LINE__, __FILE__, #x); \
                   cnt_symbolic_var++; }
-#define SYM_double_bit(x, ...) { static int cnt_symbolic_var = 1; \
+#define SYM_double(x, ...) { static int cnt_symbolic_var = 1; \
               x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownDouble(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownDouble(cnt_symbolic_var, __LINE__, __FILE__, #x); \
                   cnt_symbolic_var++; }
-#define SYM_longdouble_bit(x, ...) { static int cnt_symbolic_var = 1; \
+#define SYM_longdouble(x, ...) { static int cnt_symbolic_var = 1; \
               x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLongDouble(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLongDouble(cnt_symbolic_var, __LINE__, __FILE__, #x); \
                   cnt_symbolic_var++; }
-
-#define SYM_unsigned_char(x, ...) { static int cnt_symbolic_var = 1; \
-                *(unsigned char *)&x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUChar(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUChar(cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                cnt_symbolic_var++; }
-#define SYM_unsigned_short(x, ...) { static int cnt_symbolic_var = 1; \
-                *(unsigned short *)&x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUShort(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUShort(cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                    cnt_symbolic_var++; }
-#define SYM_unsigned_int(x, ...) { static int cnt_symbolic_var = 1; \
-                *(unsigned int *)&x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUInt(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUInt(cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                    cnt_symbolic_var++; }
-#define SYM_unsigned_long(x, ...) { static int cnt_symbolic_var = 1; \
-                *(unsigned long *)&x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownULong(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownULong(cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                    cnt_symbolic_var++; }
-#define SYM_unsigned_longlong(x, ...) { static int cnt_symbolic_var = 1; \
-                *(unsigned long long *)&x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownULongLong(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownULongLong(cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                    cnt_symbolic_var++; }
-#define SYM_char(x, ...) { static int cnt_symbolic_var = 1; \
-                *(char *)&x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownChar(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownChar(cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                    cnt_symbolic_var++; }
-#define SYM_short(x, ...) { static int cnt_symbolic_var = 1; \
-                *(short *)&x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownShort(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownShort(cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                    cnt_symbolic_var++; }
-#define SYM_int(x, ...) { static int cnt_symbolic_var = 1; \
-                *(int *)&x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownInt(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownInt(cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                    cnt_symbolic_var++; }
-#define SYM_long(x, ...) { static int cnt_symbolic_var = 1; \
-                *(long *)&x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLong(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLong(cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                    cnt_symbolic_var++; }
-#define SYM_longlong(x, ...) { static int cnt_symbolic_var = 1; \
-                *(long long *)&x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLongLong(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLongLong(cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                    cnt_symbolic_var++; }
-#define SYM_float(x, ...) { static int cnt_symbolic_var = 1; \
-                *(float *)&x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownFloat(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownFloat(cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                    cnt_symbolic_var++; }
-#define SYM_double(x, ...) { static int cnt_symbolic_var = 1; \
-                *(double *)&x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownDouble(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownDouble(cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                    cnt_symbolic_var++; }
-#define SYM_longdouble(x, ...) { static int cnt_symbolic_var = 1; \
-                *(long double *)&x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLongDouble(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLongDouble(cnt_symbolic_var, __LINE__, __FILE__, #x); \
-                    cnt_symbolic_var++; }
 #define SYM_pointer(x, size, ...) { static int cnt_symbolic_var = 1; \
                 x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownPointer(size, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUChar(size, cnt_symbolic_var, __LINE__, __FILE__, #x); \
                     cnt_symbolic_var++; }
-#define SYM_bitfield(x, ...) { static int cnt_symbolic_var = 1; \
+#define SYMfield(x, ...) { static int cnt_symbolic_var = 1; \
                 (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? (x = __CrownBitField(x,0,0,0, cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__))  : (x = __CrownBitField(x, 0,0,0,cnt_symbolic_var, __LINE__, __FILE__, #x)); \
                     cnt_symbolic_var++; }
-
+#define SYM_unsigned_char_init(x, ...) { static int cnt_symbolic_var = 1; \
+              x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUChar(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUChar(cnt_symbolic_var, __LINE__, __FILE__, #x); \
+              cnt_symbolic_var++; }
+#define SYM_unsigned_short_init(x, ...) { static int cnt_symbolic_var = 1; \
+              x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUShort(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUShort(cnt_symbolic_var, __LINE__, __FILE__, #x); \
+                  cnt_symbolic_var++; }
+#define SYM_unsigned_int_init(x, ...) { static int cnt_symbolic_var = 1; \
+              x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownUInt(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownUInt(cnt_symbolic_var, __LINE__, __FILE__, #x); \
+                  cnt_symbolic_var++; }
+#define SYM_unsigned_long_init(x, ...) { static int cnt_symbolic_var = 1; \
+              x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownULong(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownULong(cnt_symbolic_var, __LINE__, __FILE__, #x); \
+                  cnt_symbolic_var++; }
+#define SYM_unsigned_longlong_init(x, ...) { static int cnt_symbolic_var = 1; \
+              x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownULongLong(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownULongLong(cnt_symbolic_var, __LINE__, __FILE__, #x); \
+                  cnt_symbolic_var++; }
+#define SYM_char_init(x, ...) { static int cnt_symbolic_var = 1; \
+              x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownChar(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownChar(cnt_symbolic_var, __LINE__, __FILE__, #x); \
+                  cnt_symbolic_var++; }
+#define SYM_short_init(x, ...) { static int cnt_symbolic_var = 1; \
+              x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownShort(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownShort(cnt_symbolic_var, __LINE__, __FILE__, #x); \
+                  cnt_symbolic_var++; }
+#define SYM_int_init(x, ...) { static int cnt_symbolic_var = 1; \
+              x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownInt(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownInt(cnt_symbolic_var, __LINE__, __FILE__, #x); \
+                  cnt_symbolic_var++; }
+#define SYM_long_init(x, ...) { static int cnt_symbolic_var = 1; \
+              x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLong(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLong(cnt_symbolic_var, __LINE__, __FILE__, #x); \
+                  cnt_symbolic_var++; }
+#define SYM_longlong_init(x, ...) { static int cnt_symbolic_var = 1; \
+              x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLongLong(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLongLong(cnt_symbolic_var, __LINE__, __FILE__, #x); \
+                  cnt_symbolic_var++; }
+#define SYM_float_init(x, ...) { static int cnt_symbolic_var = 1; \
+              x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownFloat(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownFloat(cnt_symbolic_var, __LINE__, __FILE__, #x); \
+                  cnt_symbolic_var++; }
+#define SYM_double_init(x, ...) { static int cnt_symbolic_var = 1; \
+              x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownDouble(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownDouble(cnt_symbolic_var, __LINE__, __FILE__, #x); \
+                  cnt_symbolic_var++; }
+#define SYM_longdouble_init(x, ...) { static int cnt_symbolic_var = 1; \
+              x = (VA_NUM_ARGS_IMPL(0,## __VA_ARGS__, 1, 0)) ? __CrownLongDouble(cnt_symbolic_var, __LINE__, __FILE__,## __VA_ARGS__)  : __CrownLongDouble(cnt_symbolic_var, __LINE__, __FILE__, #x); \
+                  cnt_symbolic_var++; }
 #define SYM_is_fresh(x) __CrownIsFresh(&x)
 
 #define VA_NUM_ARGS_IMPL(_1, _2, N, ...) N
